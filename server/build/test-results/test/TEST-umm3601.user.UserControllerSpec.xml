@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="umm3601.user.UserControllerSpec" tests="9" skipped="0" failures="0" errors="0" timestamp="2024-08-29T19:58:53" hostname="neoprene.morris.umn.edu" time="1.65">
+  <properties/>
+  <testcase name="canBuildController()" classname="umm3601.user.UserControllerSpec" time="1.554"/>
+  <testcase name="buildControllerFailsWithIllegalDbFile()" classname="umm3601.user.UserControllerSpec" time="0.016"/>
+  <testcase name="canGetUsersWithAge25()" classname="umm3601.user.UserControllerSpec" time="0.028"/>
+  <testcase name="canGetUserWithSpecifiedId()" classname="umm3601.user.UserControllerSpec" time="0.007"/>
+  <testcase name="respondsAppropriatelyToIllegalAge()" classname="umm3601.user.UserControllerSpec" time="0.02"/>
+  <testcase name="canGetUsersWithGivenAgeAndCompany()" classname="umm3601.user.UserControllerSpec" time="0.004"/>
+  <testcase name="canGetUsersWithCompany()" classname="umm3601.user.UserControllerSpec" time="0.004"/>
+  <testcase name="canGetAllUsers()" classname="umm3601.user.UserControllerSpec" time="0.004"/>
+  <testcase name="respondsAppropriatelyToRequestForNonexistentId()" classname="umm3601.user.UserControllerSpec" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/home/amoak017/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.15/b4cc9d88d5de562bf75b3a54ab436ad01b3f72d/byte-buddy-agent-1.14.15.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

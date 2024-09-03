@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<checkstyle version="9.3">
+<file name="/home/amoak017/Documents/Amoak017 CSCI 3601/lab-2-mac-jakob/server/src/main/java/umm3601/user/UserDatabase.java">
+</file>
+<file name="/home/amoak017/Documents/Amoak017 CSCI 3601/lab-2-mac-jakob/server/src/main/java/umm3601/user/User.java">
+</file>
+<file name="/home/amoak017/Documents/Amoak017 CSCI 3601/lab-2-mac-jakob/server/src/main/java/umm3601/user/UserController.java">
+</file>
+<file name="/home/amoak017/Documents/Amoak017 CSCI 3601/lab-2-mac-jakob/server/src/main/java/umm3601/Main.java">
+</file>
+<file name="/home/amoak017/Documents/Amoak017 CSCI 3601/lab-2-mac-jakob/server/src/main/java/umm3601/Controller.java">
+</file>
+<file name="/home/amoak017/Documents/Amoak017 CSCI 3601/lab-2-mac-jakob/server/src/main/java/umm3601/Server.java">
+</file>
+</checkstyle>

@@ -1,4 +1,4 @@
-package umm3601.user;
+package umm3601.todo;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,28 +21,28 @@ import io.javalin.http.BadRequestResponse;
  */
 public class TodoDatabase {
 
-  private Todo[] allUsers;
+  private Todos[] allTodos;
 
-  public TodoDatabase(String userDataFile) throws IOException {
+  public TodoDatabase(String TodoDataFile) throws IOException {
     // The `.getResourceAsStream` method searches for the given resource in
     // the classpath, and returns `null` if it isn't found. We want to throw
     // an IOException if the data file isn't found, so we need to check for
     // `null` ourselves, and throw an IOException if necessary.
-    InputStream resourceAsStream = getClass().getResourceAsStream(userDataFile);
+    InputStream resourceAsStream = getClass().getResourceAsStream(TodoDataFile);
     if (resourceAsStream == null) {
-      throw new IOException("Could not find " + userDataFile);
+      throw new IOException("Could not find " + TodoDataFile);
     }
     InputStreamReader reader = new InputStreamReader(resourceAsStream);
     // A Jackson JSON mapper knows how to parse JSON into sensible 'User'
     // objects.
     ObjectMapper objectMapper = new ObjectMapper();
     // Read our user data file into an array of User objects.
-    allUsers = objectMapper.readValue(reader, User[].class);
+    allTodos = objectMapper.readValue(reader, Todos[].class);
   }
 
   public int size() {
-    return allUsers.length;
-  }
+    return allTodos.length;
+  }}
 
   /**
    * Get the single user specified by the given ID. Return `null` if there is no
@@ -58,31 +58,31 @@ public class TodoDatabase {
   /**
    * Get an array of all the users satisfying the queries in the params.
    *
-   * @param queryParams map of key-value pairs for the query
-   * @return an array of all the users matching the given criteria
+     * @param queryParams map of key-value pairs for the query
+  // * @return an array of all the users matching the given criteria
    */
-  public User[] listUsers(Map<String, List<String>> queryParams) {
-    User[] filteredUsers = allUsers;
+  //public Todos[] listTodos(Map<String, List<String>> queryParams) {
+   // Todos[] filteredTodos = allTodos;
 
     // Filter age if defined
-    if (queryParams.containsKey("age")) {
-      String ageParam = queryParams.get("age").get(0);
-      try {
-        int targetAge = Integer.parseInt(ageParam);
-        filteredUsers = filterUsersByAge(filteredUsers, targetAge);
-      } catch (NumberFormatException e) {
-        throw new BadRequestResponse("Specified age '" + ageParam + "' can't be parsed to an integer");
-      }
-    }
-    // Filter company if defined
-    if (queryParams.containsKey("company")) {
-      String targetCompany = queryParams.get("company").get(0);
-      filteredUsers = filterUsersByCompany(filteredUsers, targetCompany);
-    }
+   // if (queryParams.containsKey("age")) {
+   //   String ageParam = queryParams.get("age").get(0);
+   //  try {
+    //   int targetAge = Integer.parseInt(ageParam);
+   //  filteredTodos = filterTodosByAge(filteredTodos, targetAge);
+   //  } catch (NumberFormatException e) {
+   //   throw new BadRequestResponse("Specified age '" + ageParam + "' can't be parsed to an integer");
+   //  }
+  // }
+  // Filter company if defined
+   // if (queryParams.containsKey("company")) {
+   //  String targetCompany = queryParams.get("company").get(0);
+    //  filteredTodos = filterTodosByCompany(filteredTodos, targetCompany);
+  //}
     // Process other query parameters here...
 
-    return filteredUsers;
-  }
+   // return filteredTodos;
+  //}
 
   // /**
   //  * Get an array of all the users having the target age.
@@ -108,4 +108,5 @@ public class TodoDatabase {
   //   return Arrays.stream(users).filter(x -> x.company.equals(targetCompany)).toArray(User[]::new);
   // }
 
-}
+
+

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">server</a> &gt; <a href="index.source.html" class="el_package">umm3601.user</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package umm3601.user;
+
+import java.io.IOException;
+
+import io.javalin.Javalin;
+import io.javalin.http.Context;
+import io.javalin.http.HttpStatus;
+import io.javalin.http.NotFoundResponse;
+import umm3601.Controller;
+
+/**
+ * Controller that manages requests for info about users.
+ */
+public class UserController implements Controller {
+
+  private UserDatabase userDatabase;
+
+  /**
+   * Construct a controller for users.
+   * &lt;p&gt;
+   * This loads the &quot;database&quot; of user info from a JSON file and stores that
+   * internally so that (subsets of) users can be returned in response to
+   * requests.
+   *
+   * @param database the `Database` containing user data
+   */
+<span class="fc" id="L27">  public UserController(UserDatabase userDatabase) {</span>
+<span class="fc" id="L28">    this.userDatabase = userDatabase;</span>
+<span class="fc" id="L29">  }</span>
+
+  /***
+   * Create a database using the json file, use it as data source for a new
+   * UserController
+   *
+   * Constructing the controller might throw an IOException if there are problems
+   * reading from the JSON &quot;database&quot; file. If that happens we'll print out an
+   * error message exit the program.
+   *
+   * @throws IOException
+   */
+  public static UserController buildUserController(String userDataFile) throws IOException {
+<span class="fc" id="L42">    UserController userController = null;</span>
+
+<span class="fc" id="L44">    UserDatabase userDatabase = new UserDatabase(userDataFile);</span>
+<span class="fc" id="L45">    userController = new UserController(userDatabase);</span>
+
+<span class="fc" id="L47">    return userController;</span>
+  }
+
+  /**
+   * Get the single user specified by the `id` parameter in the request.
+   *
+   * @param ctx a Javalin HTTP context
+   */
+  public void getUser(Context ctx) {
+<span class="fc" id="L56">    String id = ctx.pathParam(&quot;id&quot;);</span>
+<span class="fc" id="L57">    User user = userDatabase.getUser(id);</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">    if (user != null) {</span>
+<span class="fc" id="L59">      ctx.json(user);</span>
+<span class="fc" id="L60">      ctx.status(HttpStatus.OK);</span>
+    } else {
+<span class="fc" id="L62">      throw new NotFoundResponse(&quot;No user with id &quot; + id + &quot; was found.&quot;);</span>
+    }
+<span class="fc" id="L64">  }</span>
+
+  /**
+   * Get a JSON response with a list of all the users in the &quot;database&quot;.
+   *
+   * @param ctx a Javalin HTTP context
+   */
+  public void getUsers(Context ctx) {
+<span class="fc" id="L72">    User[] users = userDatabase.listUsers(ctx.queryParamMap());</span>
+<span class="fc" id="L73">    ctx.json(users);</span>
+<span class="fc" id="L74">  }</span>
+
+  /**
+   * Setup routes for the `user` collection endpoints.
+   *
+   * These endpoints are:
+   * - `GET /api/users?age=NUMBER&amp;company=STRING&amp;name=STRING`
+   * - List users, filtered using query parameters
+   * - `age`, `company`, and `name` are optional query parameters
+   * - `GET /api/users/:id`
+   * - Get the specified user
+   *
+   * GROUPS SHOULD CREATE THEIR OWN CONTROLLER FOR TODOS THAT
+   * IMPLEMENTS THE `Controller` INTERFACE.
+   * You'll then implement the `addRoutes` method for that controller,
+   * which will set up the routes for that data. The `Server#setupRoutes`
+   * method will then call `addRoutes` for each controller, which will
+   * add the routes for that controller's data.
+   *
+   * @param server The Javalin server instance
+   */
+  @Override
+  public void addRoutes(Javalin server) {
+    // Get specific user
+<span class="fc" id="L98">    server.get(&quot;/api/users/{id}&quot;, this::getUser);</span>
+
+    // List users, filtered using query parameters
+<span class="fc" id="L101">    server.get(&quot;/api/users&quot;, this::getUsers);</span>
+<span class="fc" id="L102">  }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

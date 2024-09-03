@@ -1,4 +1,4 @@
-package umm3601.user;
+package umm3601.todo;
 
 import java.io.IOException;
 
@@ -11,9 +11,9 @@ import umm3601.Controller;
 /**
  * Controller that manages requests for info about users.
  */
-public class UserController implements Controller {
+public class TodoController implements Controller {
 
-  private TodoDatabase userDatabase;
+  private TodoDatabase TodoDatabase;
 
   /**
    * Construct a controller for users.
@@ -24,8 +24,8 @@ public class UserController implements Controller {
    *
    * @param database the `Database` containing user data
    */
-  public UserController(TodoDatabase userDatabase) {
-    this.userDatabase = userDatabase;
+  public TodoController(TodoDatabase TodoDatabase) {
+    this.TodoDatabase = TodoDatabase;
   }
 
   /***
@@ -38,13 +38,13 @@ public class UserController implements Controller {
    *
    * @throws IOException
    */
-  public static UserController buildUserController(String userDataFile) throws IOException {
-    UserController userController = null;
+  public static TodoController buildTodoController(String TodoDataFile) throws IOException {
+    TodoController TodoController = null;
 
-    TodoDatabase userDatabase = new TodoDatabase(userDataFile);
-    userController = new UserController(userDatabase);
+    TodoDatabase TodoDatabase = new TodoDatabase(TodoDataFile);
+    TodoController = new TodoController(TodoDatabase);
 
-    return userController;
+    return TodoController;
   }
 
   // /**
@@ -68,9 +68,9 @@ public class UserController implements Controller {
    *
    * @param ctx a Javalin HTTP context
    */
-  public void getUsers(Context ctx) {
-    User[] users = userDatabase.listUsers(ctx.queryParamMap());
-    ctx.json(users);
+  public void getTodo(Context ctx) {
+    Todos[] Todo = TodoDatabase.listTodo(ctx.queryParamMap());
+    ctx.json(Todo);
   }
 
   /**
@@ -98,6 +98,6 @@ public class UserController implements Controller {
     // server.get("/api/users/{id}", this::getUser);
 
     // List users, filtered using query parameters
-    server.get("/api/users", this::getUsers);
+    server.get("/api/Todos", this::getTodo);
   }
 }

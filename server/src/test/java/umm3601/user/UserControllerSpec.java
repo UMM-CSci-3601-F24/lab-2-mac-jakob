@@ -19,6 +19,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.exceptions.misusing.InjectMocksException;
 
 import io.javalin.Javalin;
 import io.javalin.http.BadRequestResponse;
@@ -47,7 +48,8 @@ public class UserControllerSpec {
   private UserController userController;
   // An instance of our database "layer" that is prepared in
   // `setupEach()`, and then used in the tests below.
-  private static TodosDatabase db;
+  private static UserDatabase db;
+
 
   // A "fake" version of Javalin's `Context` object that we can
   // use to test with.
@@ -148,7 +150,10 @@ public class UserControllerSpec {
     // Add a query param map to the context that maps "age"
     // to "25".
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("age", Arrays.asList(new String[] {"25"}));
+    queryParams.put("age", Arrays.asList(new String[] {"25"}));public class TodosTests {
+
+}
+
     // Tell the mock `ctx` object to return our query
     // param map when `queryParamMap()` is called.
     when(ctx.queryParamMap()).thenReturn(queryParams);
@@ -270,4 +275,6 @@ public class UserControllerSpec {
     });
     assertEquals("No user with id " + null + " was found.", exception.getMessage());
   }
+
+
 }

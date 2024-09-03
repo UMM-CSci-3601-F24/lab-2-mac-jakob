@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDatabase.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">server</a> &gt; <a href="index.source.html" class="el_package">umm3601.user</a> &gt; <span class="el_source">UserDatabase.java</span></div><h1>UserDatabase.java</h1><pre class="source lang-java linenums">package umm3601.user;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.javalin.http.BadRequestResponse;
+
+/**
+ * A fake &quot;database&quot; of user info
+ * &lt;p&gt;
+ * Since we don't want to complicate this lab with a real database, we're going
+ * to instead just read a bunch of user data from a specified JSON file, and
+ * then provide various database-like methods that allow the `UserController` to
+ * &quot;query&quot; the &quot;database&quot;.
+ */
+public class UserDatabase {
+
+  private User[] allUsers;
+
+<span class="fc" id="L26">  public UserDatabase(String userDataFile) throws IOException {</span>
+    // The `.getResourceAsStream` method searches for the given resource in
+    // the classpath, and returns `null` if it isn't found. We want to throw
+    // an IOException if the data file isn't found, so we need to check for
+    // `null` ourselves, and throw an IOException if necessary.
+<span class="fc" id="L31">    InputStream resourceAsStream = getClass().getResourceAsStream(userDataFile);</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">    if (resourceAsStream == null) {</span>
+<span class="fc" id="L33">      throw new IOException(&quot;Could not find &quot; + userDataFile);</span>
+    }
+<span class="fc" id="L35">    InputStreamReader reader = new InputStreamReader(resourceAsStream);</span>
+    // A Jackson JSON mapper knows how to parse JSON into sensible 'User'
+    // objects.
+<span class="fc" id="L38">    ObjectMapper objectMapper = new ObjectMapper();</span>
+    // Read our user data file into an array of User objects.
+<span class="fc" id="L40">    allUsers = objectMapper.readValue(reader, User[].class);</span>
+<span class="fc" id="L41">  }</span>
+
+  public int size() {
+<span class="fc" id="L44">    return allUsers.length;</span>
+  }
+
+  /**
+   * Get the single user specified by the given ID. Return `null` if there is no
+   * user with that ID.
+   *
+   * @param id the ID of the desired user
+   * @return the user with the given ID, or null if there is no user with that ID
+   */
+  public User getUser(String id) {
+<span class="fc" id="L55">    return Arrays.stream(allUsers).filter(x -&gt; x._id.equals(id)).findFirst().orElse(null);</span>
+  }
+
+  /**
+   * Get an array of all the users satisfying the queries in the params.
+   *
+   * @param queryParams map of key-value pairs for the query
+   * @return an array of all the users matching the given criteria
+   */
+  public User[] listUsers(Map&lt;String, List&lt;String&gt;&gt; queryParams) {
+<span class="fc" id="L65">    User[] filteredUsers = allUsers;</span>
+
+    // Filter age if defined
+<span class="fc bfc" id="L68" title="All 2 branches covered.">    if (queryParams.containsKey(&quot;age&quot;)) {</span>
+<span class="fc" id="L69">      String ageParam = queryParams.get(&quot;age&quot;).get(0);</span>
+      try {
+<span class="fc" id="L71">        int targetAge = Integer.parseInt(ageParam);</span>
+<span class="fc" id="L72">        filteredUsers = filterUsersByAge(filteredUsers, targetAge);</span>
+<span class="fc" id="L73">      } catch (NumberFormatException e) {</span>
+<span class="fc" id="L74">        throw new BadRequestResponse(&quot;Specified age '&quot; + ageParam + &quot;' can't be parsed to an integer&quot;);</span>
+<span class="fc" id="L75">      }</span>
+    }
+    // Filter company if defined
+<span class="fc bfc" id="L78" title="All 2 branches covered.">    if (queryParams.containsKey(&quot;company&quot;)) {</span>
+<span class="fc" id="L79">      String targetCompany = queryParams.get(&quot;company&quot;).get(0);</span>
+<span class="fc" id="L80">      filteredUsers = filterUsersByCompany(filteredUsers, targetCompany);</span>
+    }
+    // Process other query parameters here...
+
+<span class="fc" id="L84">    return filteredUsers;</span>
+  }
+
+  /**
+   * Get an array of all the users having the target age.
+   *
+   * @param users     the list of users to filter by age
+   * @param targetAge the target age to look for
+   * @return an array of all the users from the given list that have the target
+   *         age
+   */
+  public User[] filterUsersByAge(User[] users, int targetAge) {
+<span class="fc bfc" id="L96" title="All 2 branches covered.">    return Arrays.stream(users).filter(x -&gt; x.age == targetAge).toArray(User[]::new);</span>
+  }
+
+  /**
+   * Get an array of all the users having the target company.
+   *
+   * @param users         the list of users to filter by company
+   * @param targetCompany the target company to look for
+   * @return an array of all the users from the given list that have the target
+   *         company
+   */
+  public User[] filterUsersByCompany(User[] users, String targetCompany) {
+<span class="fc" id="L108">    return Arrays.stream(users).filter(x -&gt; x.company.equals(targetCompany)).toArray(User[]::new);</span>
+  }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>
