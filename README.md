@@ -174,7 +174,7 @@ so you can see how well your tests cover (i.e., exercise) your code. The command
 
 will run the tests followed by the test coverage report generator. This report is a "website" like the one from JUnit above. To see the report open the file in your browser:
 
-```text
+```text 
 server/build/jacocoHtml/index.html
 ```
 
@@ -189,7 +189,7 @@ code coverage after major stories are finished and look for areas that you're no
 as you introduce your `todo` code.
 
 :bangbang: `./gradlew check` will fail (and thus block your ability to
-merge in a pull request)) if your test coverage ever falls below 80%,
+merge in a pull request) if your test coverage ever falls below 80%,
 so keep an eye on it and take action if it starts to slide down.
 
 :pushpin: The `Main.java` and `Server.java` files are excluded from
